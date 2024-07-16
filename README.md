@@ -23,4 +23,4 @@ This Python project is a web scraper designed to extract quotes, authors, and ta
 
 1. Clone the repository:
    ```bash
-   git clone https://github.com/your-username/your-repository.git
+   git clone https://github.com/Tuborrr-Dev/Web-Scraper-and-Web-Crawer.git
