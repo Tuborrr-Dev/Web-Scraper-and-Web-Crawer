@@ -82,39 +82,31 @@ print(counter)
 
 quotes = []
 authors = []
-tags = []
 
-# Loop through URLs and scrape data
-while i < counter:
-    scraped_url = url_list[i]
-    try:
-        page = requests.get(scraped_url, timeout=30)
-        soup = BeautifulSoup(page.content, "html.parser")
-        content_container = soup.find(class_="row")
-        
-        if content_container:
-            cards = content_container.find_all("div", class_="quote")
-            for card in cards:
-                quote = card.find("span", class_="text").text.strip()
-                author = card.find("small", class_="author").text.strip()
-                tag = card.find("a", class_="tag").text.strip() if card.find("a", class_="tag") else ""
-                quotes.append(quote)
-                authors.append(author)
-                tags.append(tag)
-        else:
-            print(f"No content container found on {scraped_url}")
-    except requests.exceptions.RequestException as e:
-        print(f"An error occurred fetching {scraped_url}: {e}")
-    except Exception as e:
-        print(f"An error occurred processing {scraped_url}: {e}")
     
+#this time around we try to use the parsed soup data in the extraction instead of going through
+#each of the URL again
+while i < counter:
+    present_page_frmParser=parsed_pages[i]
+    try:
+        cards = present_page_frmParser.find_all('div', class_ = 'quote')
+        for card in cards:
+            quote = card.find('span', class_='text').text
+            author = card.find('small', class_='author').text
+            quotes.append(quote)
+            authors.append(author)
+    except requests.exceptions.RequestException as e:
+        print(f"An error occurred fetching {present_page_frmParser}: {e}")
+    except Exception as e:
+        print(f"An error occurred processing {present_page_frmParser}: {e}")
     i += 1
+    
+    
 
 # Create a DataFrame to store scraped data
 df = pd.DataFrame({
     'QUOTES': quotes,
-    'AUTHORS': authors,
-    'TAGS': tags
+    'AUTHORS': authors
 })
 
 # Define the output file path for Excel
